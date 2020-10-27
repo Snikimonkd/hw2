@@ -66,7 +66,7 @@ jobs:
         run: |
           rm -r build/*
           cd build
-          cmake -DUSE_MULTI=0 ..
+          cmake -DUSE_MULTI=ON ..
           make
           
       - name: test count lib
