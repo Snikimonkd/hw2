@@ -38,10 +38,10 @@ jobs:
       - name: test count lib
         run: |
           cd build
-          valgrind --leak-check=full ./test/count_tests
+          valgrind --leak-check=full ./build/test/count_tests
         
       - name: test linear_count lib
-        run: valgrind --leak-check=full ./test/linear_tests
+        run: valgrind --leak-check=full ./build/test/linear_tests
         
       - name: coverage
         run: |
