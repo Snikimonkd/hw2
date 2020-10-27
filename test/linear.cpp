@@ -1,15 +1,9 @@
 #include "gtest/gtest.h"
+#include <chrono>
 #include <string>
 
 extern "C" {
 #include "count.h"
-}
-
-TEST(count_lib_test, linear_stress_test) {
-    char *path_to_file = "stress_test2";
-    char simbol = 'j';
-    size_t counter = 0;
-    EXPECT_EQ(count(path_to_file, simbol, &counter), SUCCESS);
 }
 
 TEST(count_lib_test, linear_count_test1) {
