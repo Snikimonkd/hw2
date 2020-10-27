@@ -81,7 +81,6 @@ TEST(count_lib_test, multi_count_test9) {
     fclose(istream);
     args *starting_args = create_starting_args(path_to_file, simbol);
     EXPECT_NE(starting_args, nullptr);
-    EXPECT_EQ(starting_args->chunk_size, 2);
     EXPECT_EQ(starting_args->file_size, 10);
     EXPECT_STREQ(starting_args->path_to_file, path_to_file);
     EXPECT_EQ(starting_args->simbol, '1');
