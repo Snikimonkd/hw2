@@ -82,13 +82,13 @@ void *thread_routine(void *starting_args) {
     if (starting_args == NULL) {
         return NULL;
     }
-
     args *thread_args = create_thread_args(starting_args);
     if (thread_args == NULL) {
         return NULL;
     }
 
     if (thread_args->path_to_file == NULL) {
+        free(thread_args);
         return NULL;
     }
     FILE *istream = fopen(thread_args->path_to_file, "rt");
@@ -130,6 +130,7 @@ void *thread_routine(void *starting_args) {
     }
 
     char new_char;
+    size_t char_counter = 0;
 
     while (left < (right)) {
         if ((new_char = getc(istream)) == EOF) {
@@ -139,22 +140,24 @@ void *thread_routine(void *starting_args) {
         }
 
         if (new_char == thread_args->simbol) {
-            pthread_mutex_t *mutex = &counter.mutex;
-            int errflag = pthread_mutex_lock(mutex);
-            if (errflag != 0) {
-                free(thread_args);
-                fclose(istream);
-                return NULL;
-            }
-            ++(counter.value);
-            errflag = pthread_mutex_unlock(mutex);
-            if (errflag != 0) {
-                free(thread_args);
-                fclose(istream);
-                return NULL;
-            }
+            ++char_counter;
         }
         ++left;
+    }
+
+    mutex = &counter.mutex;
+    errflag = pthread_mutex_lock(mutex);
+    if (errflag != 0) {
+        free(thread_args);
+        fclose(istream);
+        return NULL;
+    }
+    counter.value += char_counter;
+    errflag = pthread_mutex_unlock(mutex);
+    if (errflag != 0) {
+        free(thread_args);
+        fclose(istream);
+        return NULL;
     }
     fclose(istream);
     free(thread_args);

@@ -70,8 +70,7 @@ add_custom_command(TARGET lcov
     COMMAND cd ${CMAKE_BINARY_DIR}/test
     COMMAND lcov --capture --directory ${CMAKE_BINARY_DIR}/test/CMakeFiles/ --output-file lcoverage/main_coverage.info
     COMMAND lcov --remove lcoverage/main_coverage.info '/usr/*' --output-file lcoverage/main_coverage.info
-    COMMAND lcov --remove lcoverage/main_coverage.info '/home/sniki/deep/iz2/build/_deps/*' --output-file lcoverage/main_coverage.info
-    COMMAND lcov --remove lcoverage/main_coverage.info '/home/sniki/deep/iz2/build/*' --output-file lcoverage/main_coverage.info
+    COMMAND lcov --remove lcoverage/main_coverage.info '${CMAKE_BINARY_DIR}/_deps/*' --output-file lcoverage/main_coverage.info
     COMMAND genhtml lcoverage/main_coverage.info --output-directory lcoverage
 )
 
