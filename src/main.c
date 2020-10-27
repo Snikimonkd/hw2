@@ -1,11 +1,5 @@
 #include "count.h"
-#include <pthread.h>
-#include <stdatomic.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <sys/time.h>
-#include <unistd.h>
 
 long mtime() {
     struct timeval t;
@@ -15,29 +9,58 @@ long mtime() {
 }
 
 int main(int argc, char *argv[]) {
-    srand(time(NULL));
-    /*FILE *istream = fopen("stress_test2", "w+t");
-    for (size_t i = 0; i < 1024 * 1024 * 100; ++i) {
-        fprintf(istream, "%c", rand() % 120 + 65);
-    }
-    fclose(istream);*/
-    char *path_to_file = "stress_test1";
-    char simbol = 't';
+    char *path_to_file;
+    char simbol;
 
-    /*if (input(argc, argv, &path_to_file, &simbol) == FAILURE) {
+    if (input(argc, argv, &path_to_file, &simbol) == FAILURE) {
         return EXIT_FAILURE;
-    }*/
+    }
+
+    FILE *istream = fopen(path_to_file, "w+t");
+    for (size_t i = 0; i < 1024 * 1024 * 100; ++i) {
+        if (i % (1024 * 1024) == 0) {
+            if (fprintf(istream, "%c", simbol) != 1) {
+                fclose(istream);
+                return EXIT_FAILURE;
+            }
+        } else {
+            if (fprintf(istream, "%c", simbol + 1) != 1) {
+                fclose(istream);
+                return EXIT_FAILURE;
+            }
+        }
+    }
+    fclose(istream);
 
     size_t counter = 0;
 
-    long t0 = mtime();
+    long average_time = 0;
 
-    if (count(path_to_file, simbol, &counter) == FAILURE) {
+    for (size_t i = 0; i < 5; ++i) {
+        long time = mtime();
+        if (count(path_to_file, simbol, &counter) == FAILURE) {
+            return EXIT_FAILURE;
+        }
+
+        if (counter != 100) {
+            return EXIT_FAILURE;
+        }
+        counter = 0;
+
+        time = mtime() - time;
+        average_time += time;
+    }
+
+    istream = fopen(path_to_file, "w+t");
+    if (istream == NULL) {
         return EXIT_FAILURE;
     }
-    t0 = mtime() - t0;
 
-    printf("Время работы прогаммы: %ld\n", t0);
-    printf("Количество символов в файле: %ld\n", counter);
+    if (fprintf(istream, "%s%ld", "Время работы:", average_time / 5) < 0) {
+        fclose(istream);
+        return EXIT_FAILURE;
+    }
+
+    fclose(istream);
     return 0;
 }

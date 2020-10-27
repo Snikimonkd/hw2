@@ -55,7 +55,18 @@ jobs:
           cd build
           make gcov
           make lcov
-          
+
+      - name: linear stress test
+        run: |
+          cd build
+          ./src/main linear_stress_test a
+
+       - name: archive linear stress test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: linear-stress-test-result
+          path: build/linear_stress_test
+
       - name: archive code coverage results
         uses: actions/upload-artifact@v2
         with:
@@ -84,6 +95,16 @@ jobs:
           cd build
           make gcov
           make lcov
+            - name: linear stress test
+        run: |
+          cd build
+          ./src/main multi_stress_test a
+
+       - name: archive multi stress test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: linear-multi-test-result
+          path: build/multi_stress_test
           
       - name: archive code coverage results
         uses: actions/upload-artifact@v2
