@@ -1,12 +1,5 @@
 #include "count.h"
-#include <sys/time.h>
-
-long mtime() {
-    struct timeval t;
-    gettimeofday(&t, NULL);
-    long mt = (long)t.tv_sec * 1000 + t.tv_usec / 1000;
-    return mt;
-}
+#include <omp.h>
 
 int main(int argc, char *argv[]) {
     char *path_to_file;
@@ -34,10 +27,10 @@ int main(int argc, char *argv[]) {
 
     size_t counter = 0;
 
-    long average_time = 0;
+    double average_time = 0;
 
     for (size_t i = 0; i < 5; ++i) {
-        long time = mtime();
+        double time = omp_get_wtime();
         if (count(path_to_file, simbol, &counter) == FAILURE) {
             return EXIT_FAILURE;
         }
@@ -47,7 +40,7 @@ int main(int argc, char *argv[]) {
         }
         counter = 0;
 
-        time = mtime() - time;
+        time = omp_get_wtime() - time;
         average_time += time;
     }
 
@@ -56,7 +49,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (fprintf(istream, "%s%ld", "Время работы:", average_time / 5) < 0) {
+    if (fprintf(istream, "%s%f", "Время работы:", average_time / 5) < 0) {
         fclose(istream);
         return EXIT_FAILURE;
     }
