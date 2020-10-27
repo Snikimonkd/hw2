@@ -21,20 +21,25 @@ jobs:
       # Runs a single command using the runners shell
       - name: install linters
         run: sudo apt-get install -y cppcheck
+        
       - name: install valgrind
         run: sudo apt install valgrind
+        
       - name: install gcovr and lcov
         run: |
           sudo apt install gcovr
           sudo apt install lcov
+          
       - name: run linters
         run: cd src && cppcheck *.c
+        
       - name: build linear lib
         run: |
           mkdir build
           cd build
           cmake ..
           make
+          
       - name: test count lib
         run: |
           cd build
@@ -43,14 +48,45 @@ jobs:
       - name: test linear_count lib
         run: |
           cd build
-          valgrind --leak-check=full ./test/linear_tests          
+          valgrind --leak-check=full ./test/linear_tests    
+                
       - name: coverage
         run: |
           cd build
           make gcov
           make lcov
-      - name: Archive code coverage results
+          
+      - name: archive code coverage results
         uses: actions/upload-artifact@v2
         with:
-          name: code-coverage-report
+          name: code-coverage-report_linear
+          path: build/test/lcoverage
+     
+      - name: build multi lib
+        run: |
+          rm -r build/*
+          cd build
+          cmake -DUSE_MULTI=0 ..
+          make
+          
+      - name: test count lib
+        run: |
+          cd build
+          valgrind --leak-check=full ./test/count_tests
+        
+      - name: test multi_count lib
+        run: |
+          cd build
+          valgrind --leak-check=full ./test/multi_tests 
+          
+      - name: coverage
+        run: |
+          cd build
+          make gcov
+          make lcov
+          
+      - name: archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report_multi
           path: build/test/lcoverage
