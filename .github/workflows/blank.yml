@@ -103,7 +103,7 @@ jobs:
       - name: archive multi stress test results
         uses: actions/upload-artifact@v2
         with:
-          name: linear-multi-test-result
+          name: multi-stress-test-result
           path: build/multi_stress_test
           
       - name: archive code coverage results
