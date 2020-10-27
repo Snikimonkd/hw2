@@ -36,7 +36,9 @@ jobs:
           cmake ..
           make
       - name: test count lib
-        run: valgrind --leak-check=full ./test/count_tests
+        run: |
+          cd build
+          valgrind --leak-check=full ./test/count_tests
         
       - name: test linear_count lib
         run: valgrind --leak-check=full ./test/linear_tests
