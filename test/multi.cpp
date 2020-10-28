@@ -58,16 +58,16 @@ TEST(count_lib_test, multi_count_test1) {
 
 TEST(count_lib_test, multi_count_test2) {
     size_t counter;
-    FILE *istream = fopen("multi_count_test3", "w+t");
+    FILE *istream = fopen("multi_count_test2", "w+t");
     EXPECT_NE(istream, nullptr);
     fclose(istream);
-    char *path_to_file = "multi_count_test3";
+    char *path_to_file = "multi_count_test2";
     char simbol = 's';
     args *new_arg = create_starting_args(path_to_file, simbol);
     EXPECT_NE(new_arg, nullptr);
     EXPECT_EQ(new_arg->chunk_size, 0);
     EXPECT_EQ(new_arg->file_size, 0);
-    EXPECT_STREQ(new_arg->path_to_file, "multi_count_test3");
+    EXPECT_STREQ(new_arg->path_to_file, "multi_count_test2");
     EXPECT_EQ(new_arg->simbol, 's');
     int i = sysconf(_SC_NPROCESSORS_ONLN);
     EXPECT_NE(i, -1);
@@ -75,18 +75,18 @@ TEST(count_lib_test, multi_count_test2) {
     free(new_arg);
 }
 
-TEST(count_lib_test, multi_count_test4) {
+TEST(count_lib_test, multi_count_test3) {
     args *new_args = NULL;
     EXPECT_EQ(create_thread_args(new_args), nullptr);
 }
 
-TEST(count_lib_test, multi_count_test5) {
+TEST(count_lib_test, multi_count_test4) {
     args new_args;
     new_args.path_to_file = NULL;
     EXPECT_EQ(create_thread_args(&new_args), nullptr);
 }
 
-TEST(count_lib_test, multi_count_test6) {
+TEST(count_lib_test, multi_count_test5) {
     args new_args;
     new_args.chunk_size = 1;
     new_args.file_size = 1;
@@ -103,19 +103,19 @@ TEST(count_lib_test, multi_count_test6) {
     free(thread_args);
 }
 
-TEST(count_lib_test, multi_count_test7) {
+TEST(count_lib_test, multi_count_test6) {
     args *new_args = NULL;
     EXPECT_EQ(thread_routine(new_args), nullptr);
 }
 
-TEST(count_lib_test, multi_count_test8) {
+TEST(count_lib_test, multi_count_test7) {
     args new_args;
     new_args.path_to_file = NULL;
     EXPECT_EQ(thread_routine(&new_args), nullptr);
 }
 
-TEST(count_lib_test, multi_count_test9) {
-    char *path_to_file = "multi_count_test9";
+TEST(count_lib_test, multi_count_test8) {
+    char *path_to_file = "multi_count_test8";
     char simbol = '1';
     FILE *istream = fopen(path_to_file, "w+t");
     EXPECT_NE(istream, nullptr);
@@ -129,22 +129,22 @@ TEST(count_lib_test, multi_count_test9) {
     int i = sysconf(_SC_NPROCESSORS_ONLN);
     EXPECT_NE(i, -1);
     EXPECT_EQ(starting_args->threads_amount, i);
-    EXPECT_NE(thread_routine(starting_args), nullptr);
+    EXPECT_NE(thread_routine(starting_args), NULL);
     free(starting_args);
 }
 
-TEST(count_lib_test, multi_count_test10) {
+TEST(count_lib_test, multi_count_test9) {
     char *path_to_file = NULL;
     size_t in = 0;
     EXPECT_EQ(count(path_to_file, 'c', &in), FAILURE);
 }
 
-TEST(count_lib_test, multi_count_test11) {
-    FILE *istream = fopen("multi_count_test11", "w+t");
+TEST(count_lib_test, multi_count_test10) {
+    FILE *istream = fopen("multi_count_test10", "w+t");
     EXPECT_NE(istream, nullptr);
     EXPECT_EQ(fprintf(istream, "%s", "1234567890"), 10);
     fclose(istream);
-    char *path_to_file = "multi_count_test11";
+    char *path_to_file = "multi_count_test10";
     size_t in = 0;
     EXPECT_EQ(count(path_to_file, '1', &in), SUCCESS);
 }
