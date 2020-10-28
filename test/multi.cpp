@@ -129,7 +129,7 @@ TEST(count_lib_test, multi_count_test8) {
     int i = sysconf(_SC_NPROCESSORS_ONLN);
     EXPECT_NE(i, -1);
     EXPECT_EQ(starting_args->threads_amount, i);
-    EXPECT_NE(thread_routine(starting_args), nullptr);
+    EXPECT_NE(thread_routine(starting_args), (void *)nullptr);
     free(starting_args);
 }
 
