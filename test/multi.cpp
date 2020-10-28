@@ -1,9 +1,52 @@
 #include "gtest/gtest.h"
+#include <chrono>
 #include <string>
 
 extern "C" {
 #include "count.h"
 #include "multithreding_count.h"
+}
+
+TEST(count_lib_test, multi_stress_test) {
+    char *path_to_file = "multi_stress_test";
+    char simbol = 'b';
+
+    FILE *istream = fopen(path_to_file, "w+t");
+    EXPECT_NE(istream, nullptr);
+    for (size_t i = 0; i < 1024 * 1024 * 100; ++i) {
+        if (i % (1024 * 1024) == 0) {
+            EXPECT_EQ(fprintf(istream, "%c", simbol), 1);
+        } else {
+            EXPECT_EQ(fprintf(istream, "%c", simbol + 1), 1);
+        }
+    }
+    fclose(istream);
+
+    size_t counter = 0;
+
+    std::chrono::duration<double> delta;
+
+    double average_time = 0;
+
+    for (size_t i = 0; i < 5; ++i) {
+        auto start = std::chrono::steady_clock::now();
+        EXPECT_NE(count(path_to_file, simbol, &counter), FAILURE);
+
+        EXPECT_EQ(counter, 100);
+
+        counter = 0;
+
+        auto end = std::chrono::steady_clock::now();
+
+        delta = end - start;
+        average_time += delta.count();
+    }
+
+    istream = fopen(path_to_file, "w+t");
+    EXPECT_NE(istream, nullptr);
+
+    EXPECT_NE(fprintf(istream, "%s%f", "Время работы:", average_time / 5), 0);
+    fclose(istream);
 }
 
 TEST(count_lib_test, multi_count_test1) {
