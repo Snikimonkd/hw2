@@ -3,7 +3,7 @@ name: CI
 
 on:
   push:
-    branches: [ making_iz_2 ]
+    branches: [ test_iz2 ]
   pull_request:
     branches: [ main ]
 
