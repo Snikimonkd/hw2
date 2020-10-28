@@ -1,6 +1,7 @@
 #include "multithreding_count.h"
 #include "count.h"
 #include <pthread.h>
+#include <stdio.h>
 #include <unistd.h>
 
 data_t counter = {PTHREAD_MUTEX_INITIALIZER, 0};
