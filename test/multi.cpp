@@ -114,25 +114,6 @@ TEST(count_lib_test, multi_count_test7) {
     EXPECT_EQ(thread_routine(&new_args), nullptr);
 }
 
-TEST(count_lib_test, multi_count_test8) {
-    char *path_to_file = "multi_count_test8";
-    char simbol = '1';
-    FILE *istream = fopen(path_to_file, "w+t");
-    EXPECT_NE(istream, nullptr);
-    EXPECT_EQ(fprintf(istream, "%s", "1234567890"), 10);
-    fclose(istream);
-    args *starting_args = create_starting_args(path_to_file, simbol);
-    EXPECT_NE(starting_args, nullptr);
-    EXPECT_EQ(starting_args->file_size, 10);
-    EXPECT_STREQ(starting_args->path_to_file, path_to_file);
-    EXPECT_EQ(starting_args->simbol, '1');
-    int i = sysconf(_SC_NPROCESSORS_ONLN);
-    EXPECT_NE(i, -1);
-    EXPECT_EQ(starting_args->threads_amount, i);
-    EXPECT_NE(thread_routine(starting_args), nullptr);
-    free(starting_args);
-}
-
 TEST(count_lib_test, multi_count_test9) {
     char *path_to_file = NULL;
     size_t in = 0;
