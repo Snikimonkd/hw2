@@ -10,11 +10,11 @@ typedef struct {
 } data_t;
 
 typedef struct args {
+    char *path_to_file;
     size_t chunk_size;
     long file_size;
     char simbol;
     int threads_amount;
-    char *path_to_file;
 } args;
 
 args *create_starting_args(char *path_to_rile, char simbol);
