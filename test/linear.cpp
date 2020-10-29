@@ -31,7 +31,7 @@ TEST(count_lib_test, linear_stress_test) {
         auto start = std::chrono::steady_clock::now();
         EXPECT_NE(count(path_to_file, simbol, &counter), FAILURE);
 
-        EXPECT_EQ(counter, 100);
+        EXPECT_EQ(counter, (size_t)100);
 
         counter = 0;
 
@@ -49,9 +49,9 @@ TEST(count_lib_test, linear_stress_test) {
 }
 
 TEST(count_lib_test, linear_count_test1) {
-    size_t counter;
+    size_t counter = 0;
     char *path_to_file = NULL;
-    char simbol;
+    char simbol = 'a';
     EXPECT_EQ(count(path_to_file, simbol, &counter), FAILURE);
 }
 
@@ -63,5 +63,5 @@ TEST(count_lib_test, linear_count_test2) {
     size_t counter = 0;
     char simbol = 'a';
     EXPECT_EQ(count("linear_count_test2", simbol, &counter), SUCCESS);
-    EXPECT_EQ(counter, 1);
+    EXPECT_EQ(counter, (size_t)1);
 }

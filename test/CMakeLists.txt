@@ -40,7 +40,7 @@ endif()
 unset(USE_MULTI CACHE)
 
 
-add_definitions(-Wno-write-strings)
+add_definitions(-Wno-write-strings -Wall -Werror -Wpedantic)
 
 foreach(file ${tests})
   set(name)

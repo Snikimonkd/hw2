@@ -32,7 +32,7 @@ TEST(count_lib_test, multi_stress_test) {
         auto start = std::chrono::steady_clock::now();
         EXPECT_NE(count(path_to_file, simbol, &counter), FAILURE);
 
-        EXPECT_EQ(counter, 100);
+        EXPECT_EQ(counter, (size_t)100);
 
         counter = 0;
 
@@ -50,14 +50,12 @@ TEST(count_lib_test, multi_stress_test) {
 }
 
 TEST(count_lib_test, multi_count_test1) {
-    size_t counter;
     char *path_to_file = nullptr;
-    char simbol;
+    char simbol = 'a';
     EXPECT_EQ(create_starting_args(path_to_file, simbol), nullptr);
 }
 
 TEST(count_lib_test, multi_count_test2) {
-    size_t counter;
     FILE *istream = fopen("multi_count_test2", "w+t");
     EXPECT_NE(istream, nullptr);
     fclose(istream);
@@ -65,8 +63,8 @@ TEST(count_lib_test, multi_count_test2) {
     char simbol = 's';
     args *new_arg = create_starting_args(path_to_file, simbol);
     EXPECT_NE(new_arg, nullptr);
-    EXPECT_EQ(new_arg->chunk_size, 0);
-    EXPECT_EQ(new_arg->file_size, 0);
+    EXPECT_EQ(new_arg->chunk_size, (size_t)0);
+    EXPECT_EQ(new_arg->file_size, (long)0);
     EXPECT_STREQ(new_arg->path_to_file, "multi_count_test2");
     EXPECT_EQ(new_arg->simbol, 's');
     int i = sysconf(_SC_NPROCESSORS_ONLN);
@@ -95,8 +93,8 @@ TEST(count_lib_test, multi_count_test5) {
     new_args.threads_amount = 1;
     args *thread_args = create_thread_args(&new_args);
     EXPECT_NE(thread_args, nullptr);
-    EXPECT_EQ(thread_args->chunk_size, 1);
-    EXPECT_EQ(thread_args->file_size, 1);
+    EXPECT_EQ(thread_args->chunk_size, (size_t)1);
+    EXPECT_EQ(thread_args->file_size, (long)1);
     EXPECT_STREQ(thread_args->path_to_file, "1");
     EXPECT_EQ(thread_args->simbol, '1');
     EXPECT_EQ(thread_args->threads_amount, 1);

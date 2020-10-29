@@ -7,6 +7,7 @@ add_library(count count.c)
 target_include_directories(count PUBLIC "${PROJECT_SOURCE_DIR}/include")
 target_link_libraries(main PUBLIC count)
 
+add_definitions(-Wall -Werror -Wpedantic)
 
 
 option(USE_MULTI "use multithreading lib" OFF)

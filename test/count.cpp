@@ -6,9 +6,9 @@ extern "C" {
 }
 
 TEST(count_lib_test, input_test1) {
-    char **test_argv;
-    char *path_to_file;
-    char simbol;
+    char **test_argv = nullptr;
+    char *path_to_file = nullptr;
+    char simbol = 'a';
     EXPECT_EQ(input(2, test_argv, &path_to_file, &simbol), FAILURE);
 }
 

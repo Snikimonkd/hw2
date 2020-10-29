@@ -99,13 +99,12 @@ void *thread_routine(void *starting_args) {
 
     pthread_mutex_t *mutex = &number_of_chunk.mutex;
     int errflag = pthread_mutex_lock(mutex);
-    size_t chunk = 0;
     if (errflag != 0) {
         free(thread_args);
         fclose(istream);
         return NULL;
     }
-    chunk = number_of_chunk.value;
+    size_t chunk = number_of_chunk.value;
     ++number_of_chunk.value;
     errflag = pthread_mutex_unlock(mutex);
     if (errflag != 0) {
