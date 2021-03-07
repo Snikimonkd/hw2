@@ -1,0 +1,113 @@
+
+name: CI
+
+on:
+  push:
+    branches: [ making_iz_2 ]
+  pull_request:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      # Runs a single command using the runners shell
+      - name: install linters
+        run: sudo apt-get install -y cppcheck
+        
+      - name: install valgrind
+        run: sudo apt install valgrind
+        
+      - name: install gcovr and lcov
+        run: |
+          sudo apt install gcovr
+          sudo apt install lcov
+          
+      - name: run linters
+        run: cd src && cppcheck *.c
+        
+      - name: build linear lib
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+          
+      - name: test count lib
+        run: |
+          cd build
+          valgrind --leak-check=full ./test/count_tests
+        
+      - name: test linear_count lib
+        run: |
+          cd build
+          valgrind --leak-check=full ./test/linear_tests    
+                
+      - name: coverage
+        run: |
+          cd build
+          make gcov
+          make lcov
+
+      - name: linear stress test
+        run: |
+          cd build
+          ./src/main linear_stress_test a
+
+      - name: archive linear stress test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: linear-stress-test-result
+          path: build/linear_stress_test
+
+      - name: archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report_linear
+          path: build/test/lcoverage
+     
+      - name: build multi lib
+        run: |
+          rm -r build/*
+          cd build
+          cmake -DUSE_MULTI=ON ..
+          make
+          
+      - name: test count lib
+        run: |
+          cd build
+          valgrind --leak-check=full ./test/count_tests
+        
+      - name: test multi_count lib
+        run: |
+          cd build
+          valgrind --leak-check=full ./test/multi_tests 
+          
+      - name: coverage
+        run: |
+          cd build
+          make gcov
+          make lcov
+      - name: linear stress test
+        run: |
+          cd build
+          ./src/main multi_stress_test a
+
+      - name: archive multi stress test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: multi-stress-test-result
+          path: build/multi_stress_test
+          
+      - name: archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report_multi
+          path: build/test/lcoverage
